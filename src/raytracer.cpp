@@ -52,15 +52,40 @@ void raytracer::render(const std::vector<Sphere> spheres)
 
 Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector<Sphere>& spheres)
 {
-	float t;
+	Vec3f intersection, normal;
+	Material mat;
 
-	for (auto& s : spheres)
+	/*for (auto& s : spheres)
 	{
 		if (!s.ray_intersect(orig, dir, t))
 		{
 			return Vec3f(0.2f, 0.7f, 0.8f);
 		}
+	}*/
+	if (!scene_intersect(orig, dir, spheres, intersection, normal, mat))
+	{
+		return Vec3f(0.2, 0.7, 0.8);
 	}
 
-	return Vec3f(0.9f, 0.1f, 0.5f);
+	return mat.diffuse_color();
+}
+
+
+bool raytracer::scene_intersect(const Vec3f& orig, const Vec3f& dir, const std::vector<Sphere>& spheres, Vec3f& hit, Vec3f& norm, Material& m)
+{
+	float nearest = std::numeric_limits<float>::max();
+
+	for (int i = 0; i < spheres.size(); ++i)
+	{
+		float dist;
+		if (spheres[i].ray_intersect(orig, dir, dist) && dist < nearest)
+		{
+			nearest = dist;
+			hit = orig + dir * dist;
+			norm = (hit - spheres[i].center()).normalize();
+			m = spheres[i].mat();
+		}
+	}
+
+	return nearest < 1000.f;
 }
