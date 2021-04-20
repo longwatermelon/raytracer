@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-void raytracer::render(const std::vector<Sphere> spheres)
+void raytracer::render(const std::vector<Sphere>& spheres, const std::vector<Light>& lights)
 {
 	std::vector<Vec3f> frame_buf(WIDTH * HEIGHT);
 
@@ -26,8 +26,8 @@ void raytracer::render(const std::vector<Sphere> spheres)
 			float px = sinf(ha);
 			float py = sinf(va);
 
-			Vec3f dir = Vec3f(px, py, -1).normalize();
-			frame_buf[y * WIDTH + x] = cast_ray(Vec3f(0, 0, 0), dir, spheres);
+			Vec3f dir = Vec3f(px, py, 1).normalize();
+			frame_buf[y * WIDTH + x] = cast_ray(Vec3f(0, 0, 0), dir, spheres, lights);
 		}
 	}
 
@@ -35,13 +35,11 @@ void raytracer::render(const std::vector<Sphere> spheres)
 
 	for (int i = 0; i < WIDTH * HEIGHT; ++i)
 	{
-		int x = (int)(255.f * frame_buf[i].x());
-		int y = (int)(255.f * frame_buf[i].y());
-		int z = (int)(255.f * frame_buf[i].z());
+		int x = (int)(255.f * std::max(0.f, std::min(1.f, frame_buf[i].x())));
+		int y = (int)(255.f * std::max(0.f, std::min(1.f, frame_buf[i].y())));
+		int z = (int)(255.f * std::max(0.f, std::min(1.f, frame_buf[i].z())));
 
-		ofs << (x > 255 ? 255 : x) << ' '
-			<< (y > 255 ? 255 : y) << ' '
-			<< (z > 255 ? 255 : z) << '\n';
+		ofs << x << ' ' << y << ' ' << z << "\n";
 	}
 
 	std::cout << "done\n";
@@ -50,24 +48,25 @@ void raytracer::render(const std::vector<Sphere> spheres)
 }
 
 
-Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector<Sphere>& spheres)
+Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector<Sphere>& spheres, const std::vector<Light>& lights)
 {
 	Vec3f intersection, normal;
 	Material mat;
 
-	/*for (auto& s : spheres)
-	{
-		if (!s.ray_intersect(orig, dir, t))
-		{
-			return Vec3f(0.2f, 0.7f, 0.8f);
-		}
-	}*/
 	if (!scene_intersect(orig, dir, spheres, intersection, normal, mat))
 	{
 		return Vec3f(0.2, 0.7, 0.8);
 	}
 
-	return mat.diffuse_color();
+	float diffuse_light_intensity = 0.f;
+
+	for (int i = 0; i < lights.size(); ++i)
+	{
+		Vec3f light_dir = (lights[i].pos() - intersection).normalize();
+		diffuse_light_intensity += lights[i].intensity() * (light_dir * normal);
+	}
+
+	return mat.diffuse_color() * diffuse_light_intensity;
 }
 
 

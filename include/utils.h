@@ -14,9 +14,10 @@ public:
 	Vec3f(float x, float y, float z)
 		: m_x(x), m_y(y), m_z(z) {}
 
+
 	Vec3f normalize() const
 	{
-		float len = std::sqrtf(m_x * m_x + m_y * m_x + m_z * m_z);
+		float len = std::sqrtf(m_x * m_x + m_y * m_y + m_z * m_z);
 
 		return { m_x / len, m_y / len, m_z / len };
 	}
@@ -34,14 +35,8 @@ public:
 
 	Vec3f operator-(const Vec3f& v) const
 	{
-		return *this + Vec3f(-v.x(), -v.y(), -v.z());
+		return { m_x - v.x(), m_y - v.y(), m_z - v.z() };
 	}
-
-	Vec3f operator-(float f) const
-	{
-		return *this + -f;
-	}
-
 
 	float operator*(const Vec3f& v) const
 	{
@@ -59,4 +54,19 @@ public:
 
 private:
 	float m_x, m_y, m_z;
+};
+
+
+class Light
+{
+public:
+	Light(const Vec3f& pos, float i)
+		: m_pos(pos), m_intensity(i) {}
+
+	Vec3f pos() const { return m_pos; }
+	float intensity() const { return m_intensity; }
+
+private:
+	Vec3f m_pos;
+	float m_intensity;
 };
