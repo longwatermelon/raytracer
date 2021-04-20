@@ -1,5 +1,6 @@
 #pragma once
 #include "utils.h"
+#include <array>
 
 
 class Material
@@ -7,13 +8,18 @@ class Material
 public:
 	Material() = default;
 
-	Material(const Vec3f& col)
-		: m_diffuse_color(col) {}
+	Material(const Vec3f& col, const std::array<float, 2>& r, float exp)
+		: m_diffuse_color(col), m_reflectiveness(r), m_specular_exp(exp) {}
 
 	Vec3f diffuse_color() const { return m_diffuse_color; }
+	std::array<float, 2> reflectiveness() const { return m_reflectiveness; }
+	float specular_exp() const { return m_specular_exp; }
 
 private:
 	Vec3f m_diffuse_color;
+
+	std::array<float, 2> m_reflectiveness;
+	float m_specular_exp;
 };
 
 

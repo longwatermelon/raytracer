@@ -57,6 +57,11 @@ private:
 };
 
 
+inline Vec3f operator-(const Vec3f& v)
+{
+	return { -v.x(), -v.y(), -v.z() };
+}
+
 class Light
 {
 public:
