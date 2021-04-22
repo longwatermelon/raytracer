@@ -22,6 +22,12 @@ public:
 		return { m_x / len, m_y / len, m_z / len };
 	}
 
+
+	float length() const
+	{
+		return std::sqrtf(m_x * m_x + m_y * m_y + m_z * m_z);
+	}
+
 	
 	Vec3f operator+(const Vec3f& v) const
 	{
