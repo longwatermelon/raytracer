@@ -63,10 +63,10 @@ Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector
 
 	float diffuse_light_intensity = 0.f, specular_light_intensity = 0.f;
 
-	for (int i = 0; i < lights.size(); ++i)
+	for (auto& light : lights)
 	{
-		Vec3f light_dir = (lights[i].pos() - intersection).normalize();
-		diffuse_light_intensity += lights[i].intensity() * std::max(0.f, light_dir * normal);
+		Vec3f light_dir = (light.pos() - intersection).normalize();
+		diffuse_light_intensity += light.intensity() * std::max(0.f, light_dir * normal);
 
 		// calculate reflection vector
 		/*
