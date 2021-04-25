@@ -2,4 +2,4 @@
 
 an improvement from the terminal raytracer
 
-![image](screenshot.png)
+![image](output.ppm)
