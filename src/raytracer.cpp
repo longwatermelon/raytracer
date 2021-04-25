@@ -66,6 +66,16 @@ Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector
 	for (auto& light : lights)
 	{
 		Vec3f light_dir = (light.pos() - intersection).normalize();
+
+		Vec3f shadow_intersection, shadow_norm;
+		Material tmp;
+
+		Vec3f shadow_orig = intersection/* + normal * 0.1f*/;
+
+		if (scene_intersect(shadow_orig, light_dir, spheres, shadow_intersection, shadow_norm, tmp) &&
+			(shadow_intersection - shadow_orig).length() < (light.pos() - shadow_orig).length())
+			continue;
+
 		diffuse_light_intensity += light.intensity() * std::max(0.f, light_dir * normal);
 
 		// calculate reflection vector

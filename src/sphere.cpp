@@ -47,6 +47,13 @@ bool Sphere::ray_intersect(const Vec3f& orig, const Vec3f& dir, float& t) const
 	float t1 = (-b + std::sqrtf(discrim)) / (2 * a);
 	float t2 = (-b - std::sqrtf(discrim)) / (2 * a);
 
-	t = std::fminf(t1, t2); // nearest intersection
+	// 1e-4f to count for floating point errors
+	// t2 is always less than t1 so if t1 is less than 0 then there is no solution
+	if (t1 <= 1e-4f) return false;
+
+	// distance cant be negative
+	if (t2 <= 1e-4f) { t = t1; }
+	else { t = std::fminf(t1, t2); } // nearest intersection
+
 	return true;
 }
