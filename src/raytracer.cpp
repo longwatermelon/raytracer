@@ -1,5 +1,5 @@
-#include "../include/raytracer.h"
-#include "../include/utils.h"
+#include "raytracer.h"
+#include "utils.h"
 #include <vector>
 #include <fstream>
 #include <iostream>

@@ -1,4 +1,4 @@
-#include "../include/raytracer.h"
+#include "raytracer.h"
 #include <iostream>
 
 

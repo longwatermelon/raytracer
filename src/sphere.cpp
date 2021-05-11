@@ -1,4 +1,4 @@
-#include "../include/sphere.h"
+#include "sphere.h"
 
 
 bool Sphere::ray_intersect(const Vec3f& orig, const Vec3f& dir, float& t) const
