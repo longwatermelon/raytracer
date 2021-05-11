@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/sphere.h"
+#include "sphere.h"
 #include <vector>
 
 
