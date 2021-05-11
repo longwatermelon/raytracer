@@ -77,37 +77,7 @@ Vec3f raytracer::cast_ray(const Vec3f& orig, const Vec3f& dir, const std::vector
 			continue;
 
 		diffuse_light_intensity += light.intensity() * std::max(0.f, light_dir * normal);
-
-		// calculate reflection vector
-		/*
-		*            normal
-		*              |        
-		*              |       
-		*     r \      Q---X->/ light_dir
-		*        \     |     /
-		*         \    |    /
-		*          \   |   /
-		*           \  |  /
-		*            \ | /
-		*             \|/
-		*              P
-		* 
-		* x is a vector pointing from Q to the end of light_dir
-		* p and q are points on the normal vector
-		* r normal and light_dir are unit vectors
-		* 
-		* r = light_dir - 2x
-		* line pq = normal * (light_dir * normal)
-		* x = light_dir - pq
-		* 
-		* substitution
-		* r = light_dir - 2 * normal * (light_dir * normal)
-		*/
-
 		Vec3f r = light_dir - normal * 2 * (normal * light_dir);
-
-		// the reflected ray and intersection both face the same direction
-		// so the closer they are to each other the greater the value is when theyre multiplied
 		specular_light_intensity += std::powf(std::max(0.f, r * intersection.normalize()), mat.specular_exp());
 	}
 
