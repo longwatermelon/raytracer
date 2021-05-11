@@ -10,9 +10,9 @@ add_executable(raytracer
 	src/main.cpp
 	src/raytracer.cpp
 	src/sphere.cpp
-	include/raytracer.h
-	include/sphere.h
-	include/utils.h
+	src/raytracer.h
+	src/sphere.h
+	src/utils.h
 )
 
 set_property(TARGET raytracer PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
